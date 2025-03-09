@@ -32,11 +32,11 @@ sunshine = st.number_input('Sunshine (hours)', min_value=0, max_value=24, value=
 
 # Prepare the input data for prediction
 input_data = pd.DataFrame({
-    'pressure': [pressure],
-    'temparature': [temperature],
+    'pressure ': [pressure],
+    'temparature ': [temperature],
     'mintemp': [mintemp],
     'dewpoint': [dewpoint],
-    'humidity': [humidity],
+    'humidity ': [humidity],
     'rainfall': [rainfall],
     'sunshine': [sunshine]
 })
