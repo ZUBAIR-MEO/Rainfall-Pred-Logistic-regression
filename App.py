@@ -17,11 +17,11 @@ Input the values for each feature, and the model will predict the maximum temper
 """)
 
 # Input fields for user to enter data
-pressure = st.number_input('Pressure (hPa)', min_value=900.0, max_value=1050.0, value=1015.9)
-temperature = st.number_input('Temperature (°C)', min_value=-10.0, max_value=50.0, value=21.3)
+pressure  = st.number_input('Pressure  (hPa)', min_value=900.0, max_value=1050.0, value=1015.9)
+temperature  = st.number_input('Temperature  (°C)', min_value=-10.0, max_value=50.0, value=21.3)
 mintemp = st.number_input('Minimum Temperature (°C)', min_value=-10.0, max_value=50.0, value=20.7)
 dewpoint = st.number_input('Dewpoint (°C)', min_value=-10.0, max_value=50.0, value=20.2)
-humidity = st.number_input('Humidity (%)', min_value=0, max_value=100, value=95)
+humidity  = st.number_input('Humidity  (%)', min_value=0, max_value=100, value=95)
 rainfall = st.selectbox('Rainfall', ['yes', 'no'])
 
 # Convert 'rainfall' from 'yes'/'no' to 1/0
@@ -32,11 +32,11 @@ sunshine = st.number_input('Sunshine (hours)', min_value=0, max_value=24, value=
 
 # Prepare the input data for prediction
 input_data = pd.DataFrame({
-    'pressure ': [pressure],
-    'temparature ': [temperature],
+    'pressure ': [pressure ],
+    'temparature ': [temperature ],
     'mintemp': [mintemp],
     'dewpoint': [dewpoint],
-    'humidity ': [humidity],
+    'humidity ': [humidity ],
     'rainfall': [rainfall],
     'sunshine': [sunshine]
 })
