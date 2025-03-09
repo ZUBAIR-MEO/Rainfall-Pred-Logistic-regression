@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
 import joblib
 
-# Load the pre-trained model (no scaler needed anymore)
+# Load the pre-trained model
 model = joblib.load('weather_temp_model.pkl')
 
 # Title of the app
@@ -29,6 +30,11 @@ rainfall = 1 if rainfall == 'yes' else 0
 # Sunshine input
 sunshine = st.number_input('Sunshine (hours)', min_value=0, max_value=24, value=0)
 
+# Add the missing feature (check which features your model requires)
+# Here I assume that the 8th feature is called 'cloud' or another variable
+cloud = st.selectbox('Cloud', ['yes', 'no'])  # This is an example of an additional feature
+cloud = 1 if cloud == 'yes' else 0
+
 # Prepare the input data for prediction
 input_data = pd.DataFrame({
     'pressure': [pressure],
@@ -37,40 +43,12 @@ input_data = pd.DataFrame({
     'dewpoint': [dewpoint],
     'humidity': [humidity],
     'rainfall': [rainfall],
-    'sunshine': [sunshine]
+    'sunshine': [sunshine],
+    'cloud': [cloud]  # Add this missing feature
 })
 
-# Ensure no spaces in column names by stripping them
-input_data.columns = input_data.columns.str.replace(' ', '')
+# Predict the maximum temperature
+predicted_temp = model.predict(input_data)
 
-# Ensure the input data matches the expected format by the model
-expected_columns = ['pressure', 'temperature', 'mintemp', 'dewpoint', 'humidity', 'rainfall', 'sunshine']
-
-# Check if all expected columns are present
-if all(col in input_data.columns for col in expected_columns):
-    # Predict the maximum temperature
-    try:
-        predicted_temp = model.predict(input_data)
-        st.write(f"**Predicted Maximum Temperature: {predicted_temp[0]:.2f}°C**")
-    except Exception as e:
-        st.error(f"Error in prediction: {str(e)}")
-else:
-    st.error("Input data does not match the expected feature set. Please check the input fields.")
-
-# Visualization Section
-st.subheader("Historical Data and Correlations")
-st.write("Below is the correlation matrix and some historical data used to train the model:")
-
-# Load your dataset for visualization (example dataset)
-data = pd.read_csv('weather_data.csv')
-
-# Show sample data
-st.dataframe(data.head())
-
-# Display Correlation Heatmap
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(12, 8))
-sns.heatmap(data.corr(), annot=True, cmap='coolwarm', fmt='.2f')
-st.pyplot()  # Display the plot in the Streamlit app
+# Display the result
+st.write(f"**Predicted Maximum Temperature: {predicted_temp[0]:.2f}°C**")
