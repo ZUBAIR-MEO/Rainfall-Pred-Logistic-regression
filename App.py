@@ -1,13 +1,11 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 import joblib
 
-# Load the pre-trained model and scaler
+# Load the pre-trained model (no scaler needed anymore)
 model = joblib.load('weather_temp_model.pkl')
-scaler = joblib.load('scaler.pkl')
 
 # Title of the app
 st.title('Weather Forecast Dashboard')
@@ -34,20 +32,17 @@ sunshine = st.number_input('Sunshine (hours)', min_value=0, max_value=24, value=
 
 # Prepare the input data for prediction
 input_data = pd.DataFrame({
-    'pressure ': [pressure],
-    'temparature ': [temperature],
+    'pressure': [pressure],
+    'temparature': [temperature],
     'mintemp': [mintemp],
     'dewpoint': [dewpoint],
-    'humidity ': [humidity],
+    'humidity': [humidity],
     'rainfall': [rainfall],
     'sunshine': [sunshine]
 })
 
-# Scale the input data using the pre-fitted scaler
-input_data_scaled = scaler.transform(input_data)
-
-# Predict the maximum temperature
-predicted_temp = model.predict(input_data_scaled)
+# Predict the maximum temperature (no scaling needed)
+predicted_temp = model.predict(input_data)
 
 # Display the result
 st.write(f"**Predicted Maximum Temperature: {predicted_temp[0]:.2f}°C**")
@@ -67,6 +62,4 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(12, 8))
-sns.heatmap(data.corr(), annot=True, cmap='coolwarm', fmt='.2f')
-st.pyplot()  # Display the plot in the Streamlit app
-
+sns.heatmap(
